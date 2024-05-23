@@ -102,7 +102,7 @@ static int produkId = 1;
 static int pelangganId = 1;
 static int pesananId = 1;
 
-// Fungsi generateId untuk Produk - rekursif
+// Fungsi generateId untuk Produk - rekursif - O(n)
 int generateProdukId()
 {
     static int id = 1;
@@ -118,7 +118,7 @@ int generateProdukId()
     }
 }
 
-// Fungsi generateId untuk Pelanggan - rekursif
+// Fungsi generateId untuk Pelanggan - rekursif - O(n)
 int generatePelangganId()
 {
     static int id = 1;
@@ -134,7 +134,7 @@ int generatePelangganId()
     }
 }
 
-// Fungsi generateId untuk Pesanan - rekursif
+// Fungsi generateId untuk Pesanan - rekursif - O(n)
 int generatePesananId()
 {
     static int id = 1;
@@ -150,7 +150,7 @@ int generatePesananId()
     }
 }
 
-// Fungsi untuk memasukkan pesanan dalam antrian - queue
+// Fungsi untuk memasukkan pesanan dalam antrian - queue - O(1)
 void enqueue(Pesanan *pesanan)
 {
     Queue *newNode = new Queue();
@@ -169,7 +169,7 @@ void enqueue(Pesanan *pesanan)
     }
 }
 
-// fungsi untuk mengambil pesanan dalam antrian - queue
+// fungsi untuk mengambil pesanan dalam antrian - queue -  O(1)
 Pesanan *dequeue()
 {
     if (front == nullptr)
@@ -190,7 +190,7 @@ Pesanan *dequeue()
     return pesanan;
 }
 
-// fungsi menambah node (vertex) baru pada graph - graph
+// fungsi menambah node (vertex) baru pada graph - graph - O(n)
 void tambahNodeGraph(int idProduk)
 {
     GraphNode *newNode = new GraphNode();
@@ -213,7 +213,7 @@ void tambahNodeGraph(int idProduk)
     }
 }
 
-// fungsi mengupdate data di node (vertex) pada graph - graph
+// fungsi mengupdate data di node (vertex) pada graph - graph - O(n)
 void updateNodeGraph(int idProduk)
 {
     GraphNode *temp = graphProduk[idProduk];
@@ -227,7 +227,7 @@ void updateNodeGraph(int idProduk)
     }
 }
 
-// fungsi hashing menggunakan ASCII dengan menjumlahkannya sesuai nama pelanggan - hash table
+// fungsi hashing menggunakan ASCII dengan menjumlahkannya sesuai nama pelanggan - hash table - O(n)
 int hashFunction(string key)
 {
     int sum = 0;
@@ -238,7 +238,7 @@ int hashFunction(string key)
     return sum % TABLE_SIZE;
 }
 
-// fungsi untuk membuat node(vertex) pada tree - tree
+// fungsi untuk membuat node(vertex) pada tree - tree - O(1)
 TreeNode *tambahTreeNode(Produk *produk)
 {
     TreeNode *newNode = new TreeNode();
@@ -248,7 +248,7 @@ TreeNode *tambahTreeNode(Produk *produk)
     return newNode;
 }
 
-// fungsi menambahkan data produk kedalam tree - tree
+// fungsi menambahkan data produk kedalam tree - tree - O(n)
 TreeNode *insertTree(TreeNode *root, Produk *produk)
 {
     if (root == nullptr)
@@ -278,7 +278,7 @@ TreeNode *insertTree(TreeNode *root, Produk *produk)
     return root;
 }
 
-// fungsi untuk membantu menemukan data produk di dalam tree - tree
+// fungsi untuk membantu menemukan data produk di dalam tree - tree - O(n)
 TreeNode *minValueNode(TreeNode *node)
 {
     TreeNode *current = node;
@@ -287,7 +287,7 @@ TreeNode *minValueNode(TreeNode *node)
     return current;
 }
 
-// fungsi untuk menghapus data produk dari tree - tree
+// fungsi untuk menghapus data produk dari tree - tree - O(n)
 TreeNode *hapusTreeNode(TreeNode *root, Produk *produk)
 {
     if (root == nullptr)
@@ -326,7 +326,7 @@ TreeNode *hapusTreeNode(TreeNode *root, Produk *produk)
     return root;
 }
 
-// fungsi untuk mencari data produk sub tree di dalam tree - dengan motede binary seacrh tree
+// fungsi untuk mencari data produk sub tree di dalam tree - dengan motede binary seacrh tree - O(n)
 void inorderTree(TreeNode *root)
 {
     if (root != nullptr)
@@ -337,7 +337,7 @@ void inorderTree(TreeNode *root)
     }
 }
 
-// fungsi untuk mengatur space string dalam tampilan
+// fungsi untuk mengatur space string dalam tampilan - O(n)
 string padString(const string &str, int width)
 {
     if (str.length() < width)
@@ -347,7 +347,7 @@ string padString(const string &str, int width)
     return str.substr(0, width);
 }
 
-// fungsi untuk mengatur space int dalam tampilan
+// fungsi untuk mengatur space int dalam tampilan - O(n)
 string padNumber(int num, int width)
 {
     string str = to_string(num);
@@ -358,7 +358,7 @@ string padNumber(int num, int width)
     return str.substr(0, width);
 }
 
-// fungsi untuk menampilkan kategori produk - tree
+// fungsi untuk menampilkan kategori produk - tree - O(n)
 void displayCategories(TreeNode *root, const string &category)
 {
     if (root != nullptr)
@@ -378,7 +378,7 @@ void displayCategories(TreeNode *root, const string &category)
     }
 }
 
-// fungsi menambahkan produk baru - linkedlist dan tree
+// fungsi menambahkan produk baru - linkedlist dan tree - O(n)
 void tambahProduk()
 {
     system("CLS");
@@ -430,7 +430,7 @@ void tambahProduk()
     }
 }
 
-// fungsi mengupdate data produk - linkedlist
+// fungsi mengupdate data produk - linkedlist - O(n)
 void updateProduk()
 {
     system("CLS");
@@ -471,7 +471,7 @@ void updateProduk()
     }
 }
 
-// fungsi menghapus produk - linkedlist dan tree
+// fungsi menghapus produk - linkedlist dan tree - O(n)
 void hapusProduk()
 {
     system("CLS");
@@ -528,7 +528,7 @@ void hapusProduk()
     }
 }
 
-// fungsi mencari produk - algoritma searching (sequintial search)
+// fungsi mencari produk - algoritma searching (sequintial search) - O(n)
 void cariProduk()
 {
     system("CLS");
@@ -598,7 +598,7 @@ void cariProduk()
     cin.get();
 }
 
-// fungsi menampilkan produk berdasarkan kategori produk - tree
+// fungsi menampilkan produk berdasarkan kategori produk - tree - O(n)
 void kategoriProduk()
 {
     system("CLS");
@@ -617,7 +617,7 @@ void kategoriProduk()
     cin.get();
 }
 
-// fungsi menampilkan produk- linked list
+// fungsi menampilkan produk- linked list - O(n)
 void tampilkanProduk()
 {
     system("CLS");
@@ -678,7 +678,7 @@ void tampilkanProduk()
     cin.get();
 }
 
-// fungsi untuk mensorting produk berdasarkan nama secara ascending (Aa-Zz) - algoritma sorting (bubble sort)
+// fungsi untuk mensorting produk berdasarkan nama secara ascending (Aa-Zz) - algoritma sorting (bubble sort) - O(n)
 void sortingProduk()
 {
     system("CLS");
@@ -712,7 +712,7 @@ void sortingProduk()
     tampilkanProduk();
 }
 
-// fungsi menambahkan pelanggan - hash table dan collision handling metode chaining (linkedlist dalam array)
+// fungsi menambahkan pelanggan - hash table dan collision handling metode chaining (linkedlist dalam array) - O(1) atau O(n)
 void tambahPelanggan()
 {
     system("CLS");
@@ -755,7 +755,7 @@ void tambahPelanggan()
     }
 }
 
-// fungsi update data pelanggan - hash table dan collision handling metode chaining (linkedlist dalam array)
+// fungsi update data pelanggan - hash table dan collision handling metode chaining (linkedlist dalam array) - O(n)
 void updatePelanggan()
 {
     system("CLS");
@@ -795,7 +795,7 @@ void updatePelanggan()
     }
 }
 
-// fungsi menghapus pelanggan - hash table
+// fungsi menghapus pelanggan - hash table - O(n)
 void hapusPelanggan()
 {
     system("CLS");
@@ -853,7 +853,7 @@ void hapusPelanggan()
     }
 }
 
-// fungsi mencari data pelanggan - algoritma searching (sequential search)
+// fungsi mencari data pelanggan - algoritma searching (sequential search) - O(n)
 void cariPelanggan()
 {
     system("CLS");
@@ -922,7 +922,7 @@ void cariPelanggan()
     cin.get();
 }
 
-// fungsi menampilkan data pelanggan 
+// fungsi menampilkan data pelanggan - O(n)
 void tampilkanPelanggan()
 {
     Pelanggan *temp = kepalaPelanggan;
@@ -933,7 +933,7 @@ void tampilkanPelanggan()
     }
 }
 
-// fungsi untuk membantu memasukkan data pelanggan ke hash table - hash table
+// fungsi untuk membantu memasukkan data pelanggan ke hash table - hash table - O(1)
 void insertPelangganToHashTable(Pelanggan *pelanggan)
 {
     int index = hashFunction(pelanggan->nama);
@@ -956,7 +956,7 @@ void insertPelangganToHashTable(Pelanggan *pelanggan)
     }
 }
 
-// fungsi untuk mensorting pelanggan berdasarkan nama secara ascending (Aa-Zz) - algoritma sorting (bubble sort)
+// fungsi untuk mensorting pelanggan berdasarkan nama secara ascending (Aa-Zz) - algoritma sorting (bubble sort) - O(n^2)
 void sortingPelanggan()
 {
     for (int i = 0; i < TABLE_SIZE; i++)
@@ -992,7 +992,7 @@ void sortingPelanggan()
     tampilkanPelangganSorted();
 }
 
-// fungsi untuk menampilkan data pelanggan yang disorting
+// fungsi untuk menampilkan data pelanggan yang disorting - O(n)
 void tampilkanPelangganSorted()
 {
     cout << "+----+------------------+------------------+---------------+" << endl;
@@ -1037,7 +1037,7 @@ void tampilkanPelangganSorted()
     cin.get();
 }
 
-// fungsi transaksi pembelian produk oleh pelanggan - queue
+// fungsi transaksi pembelian produk oleh pelanggan - queue - O(n+m)
 void pembelianProduk()
 {
     system("CLS");
@@ -1235,7 +1235,7 @@ void pembelianProduk()
     enqueue(pesanan);
 }
 
-// fungsi verifikai pesanan dari transaksi pembelian produk - queue
+// fungsi verifikai pesanan dari transaksi pembelian produk - queue - O(n+m+k)
 void verifikasiPesanan()
 {
     system("CLS");
@@ -1364,7 +1364,7 @@ void verifikasiPesanan()
     }
 }
 
-// fungsi untuk push laporan atau riwayat pesanan - stack
+// fungsi untuk push laporan atau riwayat pesanan - stack - O(!)
 void pushRiwayatPesanan(Pesanan *pesanan)
 {
     Stack *newNode = new Stack();
@@ -1373,7 +1373,7 @@ void pushRiwayatPesanan(Pesanan *pesanan)
     top = newNode;
 }
 
-// fungsi menampilkan produk yang sering dibeli - graph
+// fungsi menampilkan produk yang sering dibeli - graph - O(n * m)
 void produkSeringDibeli()
 {
     system("CLS");
@@ -1426,7 +1426,7 @@ void produkSeringDibeli()
     cin.get();
 }
 
-// fungsi untuk pop hasil pesanan dari queue ke riwayat pesanan - stack
+// fungsi untuk pop hasil pesanan dari queue ke riwayat pesanan - stack - O(1)
 Pesanan *popRiwayatPesanan()
 {
     if (top == nullptr)
@@ -1440,7 +1440,7 @@ Pesanan *popRiwayatPesanan()
     return pesanan;
 }
 
-// fungsi menampilkan riwayat transaksi pesanan - stack
+// fungsi menampilkan riwayat transaksi pesanan - stack - O(n)
 void riwayatPesananPelanggan()
 {
     system("CLS");
@@ -1479,7 +1479,8 @@ void riwayatPesananPelanggan()
     cin.get();
 }
 
-void menu()
+// fungsi menampilkan menu - O(1)
+void menu() 
 {
     int pilihan;
     do
@@ -1512,6 +1513,7 @@ void menu()
     } while (pilihan != 4);
 }
 
+// fungsi menampilkan dashboard produk - O(1)
 void dashboardProduk()
 {
     system("CLS");
@@ -1557,6 +1559,7 @@ void dashboardProduk()
     } while (pilihan != 7);
 }
 
+// fungsi menampilkan dashboard pelanggan - O(1)
 void dashboardPelanggan()
 {
     int pilihan;
@@ -1597,6 +1600,7 @@ void dashboardPelanggan()
     } while (pilihan != 7);
 }
 
+// fungsi menampilkan dashboard transaksi - O(1)
 void dashboardTransaksi()
 {
     int pilihan;
