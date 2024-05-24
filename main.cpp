@@ -1482,10 +1482,10 @@ void riwayatPesananPelanggan()
 // fungsi menampilkan menu - O(1)
 void menu() 
 {
-    system("CLS");
     int pilihan;
     do
     {
+        system("CLS");
         cout << "=== Menu Manajemen Toko Online ===" << endl;
         cout << "1. Dashboard Produk" << endl;
         cout << "2. Dashboard Pelanggan" << endl;
@@ -1517,10 +1517,10 @@ void menu()
 // fungsi menampilkan dashboard produk - O(1)
 void dashboardProduk()
 {
-    system("CLS");
     int pilihan;
     do
     {
+        system("CLS");
         cout << "=== Dashboard Produk ===" << endl;
         cout << "1. Tambah Produk" << endl;
         cout << "2. Update Produk" << endl;
@@ -1563,10 +1563,11 @@ void dashboardProduk()
 // fungsi menampilkan dashboard pelanggan - O(1)
 void dashboardPelanggan()
 {
-    system("CLS");
+
     int pilihan;
     do
     {
+        system("CLS");
         cout << "=== Dashboard Pelanggan ===" << endl;
         cout << "1. Tambah Pelanggan" << endl;
         cout << "2. Update Pelanggan" << endl;
@@ -1605,10 +1606,10 @@ void dashboardPelanggan()
 // fungsi menampilkan dashboard transaksi - O(1)
 void dashboardTransaksi()
 {
-    system("CLS");
     int pilihan;
     do
     {
+        system("CLS");
         cout << "=== Dashboard Transaksi ===" << endl;
         cout << "1. Pembelian Produk oleh Pelanggan" << endl;
         cout << "2. Verifikasi Pesanan Pelanggan" << endl;
