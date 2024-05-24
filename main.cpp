@@ -1340,28 +1340,28 @@ void verifikasiPesanan()
     cin >> noRekening;
 
     int hargaBayar;
-    cout << "Masukkan harga yang dibayar: ";
-    cin >> hargaBayar;
+    bool validHarga = false;
+    do {
+        cout << "Masukkan harga yang dibayar: ";
+        cin >> hargaBayar;
 
-    int kembalian = 0;
-    if (hargaBayar == totalHarga)
-    {
-        pesanan->status = "Selesai";
-        pushRiwayatPesanan(pesanan);
-        cout << "Pesanan telah diverifikasi dan berhasil dibayar." << endl;
-    }
-    else if (hargaBayar > totalHarga)
-    {
-        kembalian = hargaBayar - totalHarga;
-        pesanan->status = "Selesai";
-        pushRiwayatPesanan(pesanan);
-        cout << "Pesanan telah diverifikasi dan berhasil dibayar." << endl;
-        cout << "Kembalian: " << kembalian << endl;
-    }
-    else
-    {
-        cout << "Harga pembayaran tidak sesuai dengan total harga." << endl;
-    }
+        int kembalian = 0;
+        if (hargaBayar == totalHarga) {
+            pesanan->status = "Selesai";
+            pushRiwayatPesanan(pesanan);
+            cout << "Pesanan telah diverifikasi dan berhasil dibayar." << endl;
+            validHarga = true;
+        } else if (hargaBayar > totalHarga) {
+            kembalian = hargaBayar - totalHarga;
+            pesanan->status = "Selesai";
+            pushRiwayatPesanan(pesanan);
+            cout << "Pesanan telah diverifikasi dan berhasil dibayar." << endl;
+            cout << "Kembalian: " << kembalian << endl;
+            validHarga = true;
+        } else {
+            cout << "Nominal yang dimasukkan kurang, silahkan masukkan nominal ulang." << endl;
+        }
+    } while (!validHarga);
 }
 
 // fungsi untuk push laporan atau riwayat pesanan - stack - O(!)
