@@ -1482,6 +1482,7 @@ void riwayatPesananPelanggan()
 // fungsi menampilkan menu - O(1)
 void menu() 
 {
+    system("CLS");
     int pilihan;
     do
     {
@@ -1562,6 +1563,7 @@ void dashboardProduk()
 // fungsi menampilkan dashboard pelanggan - O(1)
 void dashboardPelanggan()
 {
+    system("CLS");
     int pilihan;
     do
     {
@@ -1603,6 +1605,7 @@ void dashboardPelanggan()
 // fungsi menampilkan dashboard transaksi - O(1)
 void dashboardTransaksi()
 {
+    system("CLS");
     int pilihan;
     do
     {
