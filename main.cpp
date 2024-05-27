@@ -10,7 +10,7 @@ struct Produk
     int harga;
     int diskon;
     Produk *next;
-    Produk *left; 
+    Produk *left;
     Produk *right;
 };
 
@@ -37,9 +37,21 @@ struct Pesanan
     int idPesanan;
     int idPelanggan;
     int idProduk;
+    string noResi;
+    string kurir;
+    string bank;
+    string noRekening;
+    int totalPembayaran;
     string status;
     DetailPesanan *detailPesanan;
     Pesanan *next;
+};
+
+struct Kurir
+{
+    string nama;
+    int harga;
+    Kurir *next;
 };
 
 struct Stack
@@ -74,6 +86,8 @@ struct TreeNode
     TreeNode *right;
 };
 
+Kurir *kepalakurir = nullptr;
+
 TreeNode *root = nullptr;
 
 const int TABLE_SIZE = 100;
@@ -94,6 +108,7 @@ Stack *riwayatPesananTop = nullptr;
 void menu();
 void dashboardProduk();
 void dashboardPelanggan();
+void dashboardKurir();
 void dashboardTransaksi();
 void insertPelangganToHashTable(Pelanggan *pelanggan);
 void tampilkanPelangganSorted();
@@ -713,29 +728,35 @@ void sortingProduk()
     tampilkanProduk();
 }
 
-void tambahDiskon() {
+void tambahDiskon()
+{
     system("CLS");
     int id;
     cout << "Masukkan ID produk untuk menambahkan diskon: ";
     cin >> id;
-    Produk* temp = kepalaProduk;
-    while (temp != nullptr) {
-        if (temp->id == id) {
+    Produk *temp = kepalaProduk;
+    while (temp != nullptr)
+    {
+        if (temp->id == id)
+        {
             int diskon;
             cout << "Masukkan persentase diskon (dalam persen): ";
             cin >> diskon;
-            if (diskon >= 0 && diskon <= 100) {
+            if (diskon >= 0 && diskon <= 100)
+            {
                 temp->diskon = diskon; // Simpan nilai diskon pada struktur Produk
-                temp->harga = temp->harga - (temp->harga * diskon / 100);
                 cout << "Diskon " << diskon << "% berhasil ditambahkan pada produk " << temp->nama << "." << endl;
-            } else {
+            }
+            else
+            {
                 cout << "Persentase diskon tidak valid." << endl;
             }
             break;
         }
         temp = temp->next;
     }
-    if (temp == nullptr) {
+    if (temp == nullptr)
+    {
         cout << "Produk dengan ID " << id << " tidak ditemukan." << endl;
     }
     cout << "\nTekan [ENTER] untuk kembali ke menu" << endl;
@@ -1068,6 +1089,166 @@ void tampilkanPelangganSorted()
     cin.get();
 }
 
+// Fungsi untuk menambahkan kurir - linkedlist -O(n)
+void tambahKurir()
+{
+    system("CLS");
+    char pilihan;
+    do
+    {
+        Kurir *baru = new Kurir();
+        cout << "Masukkan nama kurir: ";
+        cin.ignore();
+        getline(cin, baru->nama);
+        cout << "Masukkan harga kurir: ";
+        cin >> baru->harga;
+        baru->next = nullptr;
+
+        if (kepalakurir == nullptr)
+        {
+            kepalakurir = baru;
+        }
+        else
+        {
+            Kurir *temp = kepalakurir;
+            while (temp->next != nullptr)
+            {
+                temp = temp->next;
+            }
+            temp->next = baru;
+        }
+
+        cout << "Kurir berhasil ditambahkan!" << endl;
+        cout << "Tambah kurir lagi? (y/n): ";
+        cin >> pilihan;
+    } while (pilihan == 'y' || pilihan == 'Y');
+
+    cout << "\nTekan [ENTER] untuk kembali ke menu" << endl;
+    cin.ignore();
+    cin.get();
+}
+
+// Fungsi untuk mengudate data kurir - linkedlist - O(n)
+void updateKurir()
+{
+    system("CLS");
+    string nama;
+    cout << "Masukkan nama kurir yang ingin diupdate: ";
+    cin.ignore();
+    getline(cin, nama);
+
+    Kurir *temp = kepalakurir;
+    while (temp != nullptr)
+    {
+        if (temp->nama == nama)
+        {
+            cout << "Masukkan nama kurir baru: ";
+            getline(cin, temp->nama);
+            cout << "Masukkan harga kurir baru: ";
+            cin >> temp->harga;
+            cout << "Kurir berhasil diupdate!" << endl;
+            return;
+        }
+        temp = temp->next;
+    }
+    cout << "Kurir dengan nama " << nama << " tidak ditemukan." << endl;
+    cout << "\nIngin mengupdate kurir lagi? (Y/N) : ";
+    string updtkurir;
+    cin >> updtkurir;
+    if (updtkurir == "y" || updtkurir == "Y")
+    {
+        updateKurir();
+    }
+    else
+    {
+        cout << "\nTekan [ENTER] untuk kembali ke menu" << endl;
+        cin.ignore();
+        cin.get();
+    }
+}
+
+// fungsi untuk menghapus data kurir - linked list - o(n)
+void hapusKurir()
+{
+    system("CLS");
+    string nama;
+    cout << "Masukkan nama kurir yang ingin dihapus: ";
+    cin.ignore();
+    getline(cin, nama);
+
+    Kurir *temp = kepalakurir;
+    Kurir *prev = nullptr;
+    while (temp != nullptr)
+    {
+        if (temp->nama == nama)
+        {
+            cout << "Apakah anda yakin ingin menghapus kurir ini? (y/n): ";
+            char konfirmasi;
+            cin >> konfirmasi;
+            if (konfirmasi == 'y' || konfirmasi == 'Y')
+            {
+                if (prev == nullptr)
+                {
+                    kepalakurir = temp->next;
+                }
+                else
+                {
+                    prev->next = temp->next;
+                }
+                delete temp;
+                cout << "Kurir berhasil dihapus!" << endl;
+            }
+            else
+            {
+                cout << "Hapus dibatalkan." << endl;
+            }
+            return;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+    cout << "Kurir dengan nama " << nama << " tidak ditemukan." << endl;
+    cout << "\nIngin menghapus kurir lagi? (Y/N) : ";
+    string hpskurir;
+    cin >> hpskurir;
+    if (hpskurir == "y" || hpskurir == "Y")
+    {
+        hapusKurir();
+    }
+    else
+    {
+        cout << "\nTekan [ENTER] untuk kembali ke menu" << endl;
+        cin.ignore();
+        cin.get();
+    }
+}
+
+// fungsi untuk menampilkan data kurir - linked list - O(n)
+void tampilkanKurir()
+{
+    system("CLS");
+    cout << "+------------------+-------+" << endl;
+    cout << "| Nama Kurir       | Harga |" << endl;
+    cout << "+------------------+-------+" << endl;
+
+    Kurir *temp = kepalakurir;
+    while (temp != nullptr)
+    {
+        cout << "| " << temp->nama;
+        int namaPadding = 17 - temp->nama.length();
+        for (int i = 0; i < namaPadding; i++)
+        {
+            cout << " ";
+        }
+        cout << "| " << temp->harga << " |" << endl;
+        temp = temp->next;
+    }
+    cout << "+------------------+-------+" << endl;
+    cout << "\nTekan [ENTER] untuk kembali ke menu" << endl;
+    cin.ignore();
+    cin.get();
+}
+
 // fungsi transaksi pembelian produk oleh pelanggan - queue - O(n+m)
 void pembelianProduk()
 {
@@ -1146,60 +1327,62 @@ void pembelianProduk()
     DetailPesanan *akhirPesananProduk = nullptr;
     pesanan->detailPesanan = kepalaPesananProduk;
 
-   cout << "Produk:" << endl;
-cout << "+----+------------------+-------+------------------+----------+----------+" << endl;
-cout << "| ID |       Nama       | Stok  |    Kategori      |  Harga   |  Diskon  |" << endl;
-cout << "+----+------------------+-------+------------------+----------+----------+" << endl;
+    cout << "Produk:" << endl;
+    cout << "+----+------------------+-------+------------------+----------+----------+" << endl;
+    cout << "| ID |       Nama       | Stok  |    Kategori      |  Harga   |  Diskon  |" << endl;
+    cout << "+----+------------------+-------+------------------+----------+----------+" << endl;
 
-Produk* temp = kepalaProduk;
-while (temp != nullptr) {
-    cout << "| ";
-    if (temp->id < 10)
-        cout << " ";
-    cout << temp->id << " ";
+    Produk *temp = kepalaProduk;
+    while (temp != nullptr)
+    {
+        cout << "| ";
+        if (temp->id < 10)
+            cout << " ";
+        cout << temp->id << " ";
 
-    cout << "| " << temp->nama;
-    int namaPadding = 17 - temp->nama.length();
-    for (int i = 0; i < namaPadding; i++) {
+        cout << "| " << temp->nama;
+        int namaPadding = 17 - temp->nama.length();
+        for (int i = 0; i < namaPadding; i++)
+        {
+            cout << " ";
+        }
         cout << " ";
+
+        cout << "| ";
+        if (temp->stok < 10)
+            cout << " ";
+        if (temp->stok < 100)
+            cout << " ";
+        if (temp->stok < 1000)
+            cout << " ";
+        cout << temp->stok << " ";
+
+        cout << "| " << temp->kategori;
+        int kategoriPadding = 17 - temp->kategori.length();
+        for (int i = 0; i < kategoriPadding; i++)
+        {
+            cout << " ";
+        }
+        cout << " ";
+
+        cout << "| ";
+        if (temp->harga < 10000)
+            cout << " ";
+        if (temp->harga < 1000)
+            cout << " ";
+        if (temp->harga < 100)
+            cout << " ";
+        if (temp->harga < 10)
+            cout << " ";
+        cout << temp->harga << " ";
+
+        cout << "| ";                          // Kolom diskon
+        cout << temp->diskon << "% |" << endl; // Menampilkan nilai diskon dari struktur Produk
+
+        temp = temp->next;
     }
-    cout << " ";
-
-    cout << "| ";
-    if (temp->stok < 10)
-        cout << " ";
-    if (temp->stok < 100)
-        cout << " ";
-    if (temp->stok < 1000)
-        cout << " ";
-    cout << temp->stok << " ";
-
-    cout << "| " << temp->kategori;
-    int kategoriPadding = 17 - temp->kategori.length();
-    for (int i = 0; i < kategoriPadding; i++) {
-        cout << " ";
-    }
-    cout << " ";
-
-    cout << "| ";
-    if (temp->harga < 10000)
-        cout << " ";
-    if (temp->harga < 1000)
-        cout << " ";
-    if (temp->harga < 100)
-        cout << " ";
-    if (temp->harga < 10)
-        cout << " ";
-    cout << temp->harga << " ";
-
-    cout << "| "; // Kolom diskon
-    cout << temp->diskon << "% |" << endl; // Menampilkan nilai diskon dari struktur Produk
-
-    temp = temp->next;
-}
-cout << "+----+------------------+-------+------------------+----------+----------+" << endl;
-cout << endl;
-
+    cout << "+----+------------------+-------+------------------+----------+----------+" << endl;
+    cout << endl;
 
     char lanjut;
     do
@@ -1267,8 +1450,6 @@ cout << endl;
     enqueue(pesanan);
 }
 
-
-
 // fungsi verifikai pesanan dari transaksi pembelian produk - queue - O(n+m+k)
 void verifikasiPesanan()
 {
@@ -1294,13 +1475,7 @@ void verifikasiPesanan()
     cout << "+-------------+---------------+---------------+----------+" << endl;
     cout << "| ID Pesanan  | ID Pelanggan  |    Produk     |  Status  |" << endl;
     cout << "+-------------+---------------+---------------+----------+" << endl;
-    cout << "| ";
-    if (pesanan->idPesanan < 10)
-        cout << " ";
-    cout << pesanan->idPesanan << "          | ";
-    if (pesanan->idPelanggan < 10)
-        cout << " ";
-    cout << pesanan->idPelanggan << "             | ";
+    cout << "| " << pesanan->idPesanan << "          | " << pesanan->idPelanggan << "             | ";
 
     DetailPesanan *detailPesanan = pesanan->detailPesanan;
     string produkDipesan = "";
@@ -1309,9 +1484,7 @@ void verifikasiPesanan()
         produkDipesan += detailPesanan->namaProduk + " x" + to_string(detailPesanan->kuantitas) + ", ";
         detailPesanan = detailPesanan->next;
     }
-    cout << produkDipesan.substr(0, produkDipesan.length() - 2);
-
-    cout << "| " << pesanan->status << " |" << endl;
+    cout << produkDipesan.substr(0, produkDipesan.length() - 2) << " | " << pesanan->status << " |" << endl;
     cout << "+-------------+---------------+---------------+----------+" << endl;
 
     cout << "\nPelanggan: " << pelanggan->nama << endl;
@@ -1323,66 +1496,76 @@ void verifikasiPesanan()
     cout << "| ID |       Nama       | Kuantitas |  Harga   |  Diskon  |" << endl;
     cout << "+----+------------------+----------+----------+----------+" << endl;
 
-detailPesanan = pesanan->detailPesanan;
-while (detailPesanan != nullptr)
-{
-    int hargaProduk = detailPesanan->harga;
-    int diskonProduk = 0;
-
-    // Cari produk dari daftar produk untuk mendapatkan informasi diskon
-    Produk *temp = kepalaProduk;
-    while (temp != nullptr)
+    detailPesanan = pesanan->detailPesanan;
+    while (detailPesanan != nullptr)
     {
-        if (temp->id == detailPesanan->idProduk)
+        int hargaProduk = detailPesanan->harga;
+        int diskonProduk = 0;
+
+        // Cari produk dari daftar produk untuk mendapatkan informasi diskon
+        Produk *temp = kepalaProduk;
+        while (temp != nullptr)
         {
-            // Gunakan nilai diskon dari struktur Produk
-            diskonProduk = temp->diskon;
-            hargaProduk = temp->harga * (100 - temp->diskon) / 100;
-            break;
+            if (temp->id == detailPesanan->idProduk)
+            {
+                // Gunakan nilai diskon dari struktur Produk
+                diskonProduk = temp->diskon;
+                hargaProduk = temp->harga * (100 - temp->diskon) / 100;
+                break;
+            }
+            temp = temp->next;
         }
-        temp = temp->next;
-    }
 
-        cout << "| ";
-        if (detailPesanan->idProduk < 10)
-            cout << " ";
-        cout << detailPesanan->idProduk << " ";
-
-        cout << "| " << detailPesanan->namaProduk;
+        cout << "| " << detailPesanan->idProduk << " | " << detailPesanan->namaProduk;
         int namaPadding = 17 - detailPesanan->namaProduk.length();
         for (int i = 0; i < namaPadding; i++)
         {
             cout << " ";
         }
-        cout << " ";
 
-        cout << "| ";
-        if (detailPesanan->kuantitas < 10)
-            cout << " ";
-        cout << detailPesanan->kuantitas << "        ";
+        cout << "| " << detailPesanan->kuantitas << "        | " << hargaProduk * detailPesanan->kuantitas << " | " << diskonProduk << "% |" << endl;
 
-        cout << "| ";
-        if (hargaProduk * detailPesanan->kuantitas < 10000)
-            cout << " ";
-        if (hargaProduk * detailPesanan->kuantitas < 1000)
-            cout << " ";
-        if (hargaProduk * detailPesanan->kuantitas < 100)
-            cout << " ";
-        if (hargaProduk * detailPesanan->kuantitas < 10)
-            cout << " ";
-        cout << hargaProduk * detailPesanan->kuantitas << " ";
-
-        cout << "| ";
-        cout << diskonProduk << "% |" << endl;
-
-       totalHargaAsli += detailPesanan->harga * detailPesanan->kuantitas;
-    totalHargaDiskon += hargaProduk * detailPesanan->kuantitas;
-    detailPesanan = detailPesanan->next;
+        totalHargaAsli += detailPesanan->harga * detailPesanan->kuantitas;
+        totalHargaDiskon += hargaProduk * detailPesanan->kuantitas;
+        detailPesanan = detailPesanan->next;
     }
 
     cout << "+----+------------------+----------+----------+----------+" << endl;
     cout << "Total Belanja Asli: " << totalHargaAsli << endl;
     cout << "Total Belanja Diskon: " << totalHargaDiskon << endl;
+
+    cout << "Pilih kurir pengiriman:" << endl;
+    Kurir *tempKurir = kepalakurir;
+    int pilihKurir;
+    int i = 1;
+    do
+    {
+        cout << i << ". " << tempKurir->nama << " (Rp" << tempKurir->harga << ")" << endl;
+        tempKurir = tempKurir->next;
+        i++;
+    } while (tempKurir != nullptr);
+    cout << "Pilihan: ";
+    cin >> pilihKurir;
+
+    tempKurir = kepalakurir;
+    for (int i = 1; i < pilihKurir; i++)
+    {
+        tempKurir = tempKurir->next;
+    }
+    pesanan->kurir = tempKurir->nama;
+    int ongkosKirim = tempKurir->harga;
+
+    // No. resi
+    string noResi;
+    cout << "Masukkan nomor resi pengiriman: ";
+    cin >> noResi;
+    pesanan->noResi = noResi;
+
+    int totalBayar = totalHargaDiskon + ongkosKirim;
+    pesanan->totalPembayaran = totalBayar;
+
+    cout << "Ongkos kirim: Rp" << ongkosKirim << endl;
+    cout << "Total pembayaran: Rp" << totalBayar << endl;
 
     cout << "Pilih bank pembayaran:" << endl;
     cout << "1. Bank BCA" << endl;
@@ -1392,36 +1575,60 @@ while (detailPesanan != nullptr)
     int pilihan;
     cin >> pilihan;
 
-    string noRekening;
+    switch (pilihan)
+    {
+    case 1:
+        pesanan->bank = "Bank BCA";
+        break;
+    case 2:
+        pesanan->bank = "Bank Mandiri";
+        break;
+    case 3:
+        pesanan->bank = "Bank BRI";
+        break;
+    default:
+        cout << "Pilihan tidak valid. Pembayaran default ke Bank BCA." << endl;
+        pesanan->bank = "Bank BCA";
+        break;
+    }
+
     cout << "Masukkan nomor rekening: ";
+    string noRekening;
     cin >> noRekening;
+    pesanan->noRekening = noRekening;
 
     int hargaBayar;
     bool validHarga = false;
-    do {
+    do
+    {
         cout << "Masukkan harga yang dibayar: ";
         cin >> hargaBayar;
 
         int kembalian = 0;
-        if (hargaBayar == totalHargaDiskon) {
+        if (hargaBayar == totalBayar)
+        {
             pesanan->status = "Selesai";
             pushRiwayatPesanan(pesanan);
             cout << "Pesanan telah diverifikasi dan berhasil dibayar." << endl;
             validHarga = true;
-        } else if (hargaBayar > totalHargaDiskon) {
-            kembalian = hargaBayar - totalHargaDiskon;
+        }
+        else if (hargaBayar > totalBayar)
+        {
+            kembalian = hargaBayar - totalBayar;
             pesanan->status = "Selesai";
             pushRiwayatPesanan(pesanan);
             cout << "Pesanan telah diverifikasi dan berhasil dibayar." << endl;
             cout << "Kembalian: " << kembalian << endl;
             validHarga = true;
-        } else {
+        }
+        else
+        {
             cout << "Nominal yang dimasukkan kurang, silahkan masukkan nominal ulang." << endl;
         }
     } while (!validHarga);
 }
 
-// fungsi untuk push laporan atau riwayat pesanan - stack - O(!)
+// fungsi untuk push laporan atau riwayat pesanan - stack - O(1)
 void pushRiwayatPesanan(Pesanan *pesanan)
 {
     Stack *newNode = new Stack();
@@ -1430,7 +1637,7 @@ void pushRiwayatPesanan(Pesanan *pesanan)
     top = newNode;
 }
 
-// fungsi menampilkan produk yang sering dibeli - graph - O(n * m)
+// fungsi menampilkan produk yang sering dibeli - graph - O(n * m * 100)
 void produkSeringDibeli()
 {
     system("CLS");
@@ -1497,25 +1704,33 @@ Pesanan *popRiwayatPesanan()
     return pesanan;
 }
 
-// fungsi menampilkan riwayat transaksi pesanan - stack - O(n)
+// fungsi print pembatas riwayat transaksi - o(n)
+void printColumn(const string &text, int width)
+{
+    cout << text;
+    for (int i = text.length(); i < width; i++)
+    {
+        cout << " ";
+    }
+    cout << "| ";
+}
+
+// fungsi menampilkan riwayat transaksi pesanan - stack - O(n^2)
 void riwayatPesananPelanggan()
 {
     system("CLS");
-    cout << "+-------------+---------------+---------------+----------+" << endl;
-    cout << "| ID Pesanan  | ID Pelanggan  |    Produk     |  Status  |" << endl;
-    cout << "+-------------+---------------+---------------+----------+" << endl;
+    cout << "+-------------+---------------+------------+------------------+----------------+--------+--------+-------------------+--------+" << endl;
+    cout << "| ID Pesanan  | ID Pelanggan  |  No. Resi  |      Produk      | Total Pembayaran | Kurir  |  Bank  |  No. Rekening Bank | Status |" << endl;
+    cout << "+-------------+---------------+------------+------------------+----------------+--------+--------+-------------------+--------+" << endl;
 
     Stack *temp = top;
     while (temp != nullptr)
     {
         Pesanan *pesanan = temp->data;
-        cout << "| ";
-        if (pesanan->idPesanan < 10)
-            cout << " ";
-        cout << pesanan->idPesanan << "          | ";
-        if (pesanan->idPelanggan < 10)
-            cout << " ";
-        cout << pesanan->idPelanggan << "             | ";
+
+        printColumn(to_string(pesanan->idPesanan), 11);
+        printColumn(to_string(pesanan->idPelanggan), 13);
+        printColumn(pesanan->noResi, 10);
 
         DetailPesanan *detailPesanan = pesanan->detailPesanan;
         string produkDipesan = "";
@@ -1524,29 +1739,36 @@ void riwayatPesananPelanggan()
             produkDipesan += detailPesanan->namaProduk + " x" + to_string(detailPesanan->kuantitas) + ", ";
             detailPesanan = detailPesanan->next;
         }
-        cout << produkDipesan.substr(0, produkDipesan.length() - 2);
+        if (produkDipesan.length() > 2)
+        {
+            produkDipesan = produkDipesan.substr(0, produkDipesan.length() - 2);
+        }
+        printColumn(produkDipesan, 18);
+        printColumn(to_string(pesanan->totalPembayaran), 16);
+        printColumn(pesanan->kurir, 6);
+        printColumn(pesanan->bank, 6);
+        printColumn(pesanan->noRekening, 17);
+        printColumn(pesanan->status, 6);
 
-        cout << "| " << pesanan->status << " |" << endl;
+        cout << endl;
+
         temp = temp->next;
     }
-
-    cout << "+-------------+---------------+---------------+----------+" << endl;
-    cout << "\nTekan [ENTER] untuk kembali ke menu" << endl;
-    cin.ignore();
-    cin.get();
+    cout << "+-------------+---------------+------------+------------------+----------------+--------+--------+-------------------+--------+" << endl;
 }
 
 // fungsi menampilkan menu - O(1)
-void menu() 
+void menu()
 {
     int pilihan;
     do
     {
-        cout << "=== Menu Manajemen Toko Online ===" << endl;
+        cout << "=== Menu Inventaris e-Commerce ===" << endl;
         cout << "1. Dashboard Produk" << endl;
         cout << "2. Dashboard Pelanggan" << endl;
-        cout << "3. Dashboard Transaksi" << endl;
-        cout << "4. Keluar" << endl;
+        cout << "3. Dashboard Kurir" << endl;
+        cout << "4. Dashboard Transaksi" << endl;
+        cout << "0. Keluar" << endl;
         cout << "Pilih menu: ";
         cin >> pilihan;
 
@@ -1559,15 +1781,18 @@ void menu()
             dashboardPelanggan();
             break;
         case 3:
-            dashboardTransaksi();
+            dashboardKurir();
             break;
         case 4:
+            dashboardTransaksi();
+            break;
+        case 0:
             cout << "Terima kasih telah menggunakan aplikasi ini!" << endl;
             break;
         default:
             cout << "Pilihan tidak valid." << endl;
         }
-    } while (pilihan != 4);
+    } while (pilihan != 0);
 }
 
 // fungsi menampilkan dashboard produk - O(1)
@@ -1585,7 +1810,7 @@ void dashboardProduk()
         cout << "5. Kategori Produk" << endl;
         cout << "6. Tampilkan dan Sorting Semua Produk" << endl;
         cout << "7. Tambahkan Diskon Produk " << endl;
-        cout << "8. Kembali ke Menu Utama" << endl;
+        cout << "0. Kembali ke Menu Utama" << endl;
         cout << "Pilih menu: ";
         cin >> pilihan;
 
@@ -1612,12 +1837,12 @@ void dashboardProduk()
         case 7:
             tambahDiskon();
             break;
-        case 8:
+        case 0:
             return;
         default:
             cout << "Pilihan tidak valid." << endl;
         }
-    } while (pilihan != 8);
+    } while (pilihan != 0);
 }
 
 // fungsi menampilkan dashboard pelanggan - O(1)
@@ -1632,7 +1857,7 @@ void dashboardPelanggan()
         cout << "3. Hapus Pelanggan" << endl;
         cout << "4. Cari Pelanggan" << endl;
         cout << "5. Tampilkan dan Sorting Pelanggan" << endl;
-        cout << "6. Kembali ke Menu Utama" << endl;
+        cout << "0. Kembali ke Menu Utama" << endl;
         cout << "Pilih menu: ";
         cin >> pilihan;
 
@@ -1653,12 +1878,49 @@ void dashboardPelanggan()
         case 5:
             sortingPelanggan();
             break;
-        case 6:
+        case 0:
             return;
         default:
             cout << "Pilihan tidak valid." << endl;
         }
-    } while (pilihan != 7);
+    } while (pilihan != 0);
+}
+
+// fungsi menampilkan dashboard kurir - O(1)
+void dashboardKurir()
+{
+    int pilihan;
+    do
+    {
+        cout << "=== Dashboard Kurir ===" << endl;
+        cout << "1. Tambah Kurir" << endl;
+        cout << "2. Update Kurir" << endl;
+        cout << "3. Hapus Kurir" << endl;
+        cout << "4. Tampilkan Semua Kurir" << endl;
+        cout << "0. Kembali ke Menu Utama" << endl;
+        cout << "Pilih menu: ";
+        cin >> pilihan;
+
+        switch (pilihan)
+        {
+        case 1:
+            tambahKurir();
+            break;
+        case 2:
+            updateKurir();
+            break;
+        case 3:
+            hapusKurir();
+            break;
+        case 4:
+            tampilkanKurir();
+            break;
+        case 0:
+            return;
+        default:
+            cout << "Pilihan tidak valid." << endl;
+        }
+    } while (pilihan != 0);
 }
 
 // fungsi menampilkan dashboard transaksi - O(1)
@@ -1672,7 +1934,7 @@ void dashboardTransaksi()
         cout << "2. Verifikasi Pesanan Pelanggan" << endl;
         cout << "3. Riwayat Pesanan Pelanggan" << endl;
         cout << "4. Produk yang Sering Dibeli oleh Pelanggan" << endl;
-        cout << "5. Kembali ke Menu Utama" << endl;
+        cout << "0. Kembali ke Menu Utama" << endl;
         cout << "Pilih menu: ";
         cin >> pilihan;
 
@@ -1690,12 +1952,12 @@ void dashboardTransaksi()
         case 4:
             produkSeringDibeli();
             break;
-        case 5:
+        case 0:
             return;
         default:
             cout << "Pilihan tidak valid." << endl;
         }
-    } while (pilihan != 5);
+    } while (pilihan != 0);
 }
 
 int main()
